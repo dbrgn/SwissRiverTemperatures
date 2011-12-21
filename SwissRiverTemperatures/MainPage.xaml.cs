@@ -10,20 +10,26 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
+using System.Collections.ObjectModel;
 
 namespace SwissRiverTemperatures
 {
+    
+
     public partial class MainPage : PhoneApplicationPage
     {
-        // Constructor
+        public ObservableCollection<Models.River> Rivers = new ObservableCollection<Models.River>();
+
         public MainPage()
         {
             InitializeComponent();
-        }
-
-        private void RefreshButton_Click(object sender, RoutedEventArgs e)
-        {
-            
+            Rivers.Add(new Models.River("Emme"));
+            Rivers.Add(new Models.River("Aare"));
+            Rivers.Add(new Models.River("Rhein"));
+            Rivers.Add(new Models.River("Limmat"));
+            Rivers.Add(new Models.River("Reuss"));
+            Rivers.Add(new Models.River("Thur"));
+            RiverList.DataContext = Rivers;
         }
     }
 }
