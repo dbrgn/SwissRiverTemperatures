@@ -20,5 +20,10 @@ namespace SwissRiverTemperatures
         {
             InitializeComponent();
         }
+
+        private void RefreshButton_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
     }
 }

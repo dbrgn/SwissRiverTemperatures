@@ -27,7 +27,14 @@
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0"></Grid>
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+            <ListBox Height="100" HorizontalAlignment="Left" Margin="0" Name="RiverList" VerticalAlignment="Top" Width="460" />
+        </Grid>
+        
+        <!--ButtonPanel - buttons and stuff...-->
+        <Grid x:Name="ButtonPanel" Grid.Row="2" Margin="12,0,12,0" VerticalAlignment="Bottom">
+            <Button Content="Refresh" Height="72" HorizontalAlignment="Left" Margin="0,5" Name="RefreshButton" VerticalAlignment="Bottom" Width="160" Click="RefreshButton_Click" />
+        </Grid>
     </Grid>
  
     <!--Sample code showing usage of ApplicationBar-->
