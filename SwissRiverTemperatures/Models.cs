@@ -48,8 +48,12 @@ namespace SwissRiverTemperatures
         /// </summary>
         public class River
         {
-            public readonly String name;
             private ObservableCollection<MeasuringStation> MeasuringStations = new ObservableCollection<MeasuringStation>();
+            public String Name
+            {
+                get;
+                private set;
+            }
             public int MeasuringStationCount
             {
                 get { return this.MeasuringStations.Count; }
@@ -57,7 +61,7 @@ namespace SwissRiverTemperatures
 
             public River(String name)
             {
-                this.name = name;
+                this.Name = name;
             }
 
             public void AddMeasuringStation(MeasuringStation station)
@@ -67,7 +71,7 @@ namespace SwissRiverTemperatures
 
             public override String ToString()
             {
-                return this.name + " (" + this.MeasuringStationCount + ")";
+                return this.Name + " (" + this.MeasuringStationCount + ")";
             }
         }
     }

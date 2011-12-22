@@ -22,20 +22,32 @@
 
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock x:Name="ApplicationTitle" Text="swiss river temperatures" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock x:Name="PageTitle" Text="rivers" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+            <TextBlock x:Name="ApplicationTitle" Text="swiss river temperatures" Style="{StaticResource PhoneTextNormalStyle}" Margin="0,0,12,0" />
+            <TextBlock x:Name="PageTitle" Text="rivers" Margin="0,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
         <StackPanel x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <ListBox Margin="0,15,0,0" Name="RiverList" VerticalAlignment="Top" ItemsSource="{Binding}"/>
+            <ListBox Name="RiverList" ItemsSource="{Binding}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="{Binding Name}" Margin="0,2" Style="{StaticResource PhoneTextLargeStyle}" />
+                            <StackPanel Orientation="Horizontal" Margin="0,2">
+                                <TextBlock Text="Measuring stations: " />
+                                <TextBlock Text="{Binding MeasuringStationCount}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </StackPanel>
     </Grid>
  
     <!--ApplicationBar-->
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
-            <shell:ApplicationBarIconButton IconUri="/Images/appbar.refresh.rest.png" Text="refresh"/>
+            <shell:ApplicationBarIconButton IconUri="/Images/appbar.refresh.rest.png" Text="refresh" Click="ApplicationBarIconButton_Click" />
             <shell:ApplicationBar.MenuItems>
                 <shell:ApplicationBarMenuItem Text="about"/>
             </shell:ApplicationBar.MenuItems>
