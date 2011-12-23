@@ -16,7 +16,7 @@ namespace SwissRiverTemperatures
     {
         public struct TemperatureUnit
         {
-            // TODO: Create some kind of string struct
+            // TODO: Create some kind of string enum
             public const String CELSIUS = "°C";
             public const String FAHRENHEIT = "°F";
             public const String KELVIN = "°K";

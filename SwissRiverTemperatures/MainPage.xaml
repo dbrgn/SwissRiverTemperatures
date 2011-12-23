@@ -17,31 +17,31 @@
     <Grid x:Name="LayoutRoot" Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="512*" />
         </Grid.RowDefinitions>
 
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
             <TextBlock x:Name="ApplicationTitle" Text="swiss river temperatures" Style="{StaticResource PhoneTextNormalStyle}" Margin="0,0,12,0" />
             <TextBlock x:Name="PageTitle" Text="rivers" Margin="0,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+            <ScrollViewer Height="23" Name="scrollViewer1" Width="120" />
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
-        <StackPanel x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <ListBox Name="RiverList" ItemsSource="{Binding}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Vertical">
-                            <TextBlock Text="{Binding Name}" Margin="0,2" Style="{StaticResource PhoneTextLargeStyle}" />
-                            <StackPanel Orientation="Horizontal" Margin="0,2">
-                                <TextBlock Text="Measuring stations: " />
-                                <TextBlock Text="{Binding MeasuringStationCount}" />
-                            </StackPanel>
+        <ListBox Name="RiverList" ItemsSource="{Binding}" Margin="12,0,30,0" HorizontalContentAlignment="Stretch" Grid.Row="2">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="{Binding Name}" Margin="0,2" Style="{StaticResource PhoneTextLargeStyle}" />
+                        <StackPanel Orientation="Horizontal" Margin="0,2">
+                            <TextBlock Text="Measuring stations: " />
+                            <TextBlock Text="{Binding MeasuringStationCount}" />
                         </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
  
     <!--ApplicationBar-->
