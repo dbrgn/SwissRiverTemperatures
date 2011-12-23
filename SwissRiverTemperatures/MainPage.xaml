@@ -17,8 +17,7 @@
     <Grid x:Name="LayoutRoot" Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="512*" />
+            <RowDefinition Height="100*" />
         </Grid.RowDefinitions>
 
         <!--TitlePanel contains the name of the application and page title-->
@@ -29,19 +28,24 @@
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
-        <ListBox Name="RiverList" ItemsSource="{Binding}" Margin="12,0,30,0" HorizontalContentAlignment="Stretch" Grid.Row="2">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock Text="{Binding Name}" Margin="0,2" Style="{StaticResource PhoneTextLargeStyle}" />
-                        <StackPanel Orientation="Horizontal" Margin="0,2">
-                            <TextBlock Text="Measuring stations: " />
-                            <TextBlock Text="{Binding MeasuringStationCount}" />
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,30,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100*"/>
+            </Grid.RowDefinitions>
+            <ListBox Name="RiverList" ItemsSource="{Binding}" HorizontalContentAlignment="Stretch" Margin="0" Grid.Row="1">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="{Binding Name}" Margin="0,2" Style="{StaticResource PhoneTextLargeStyle}" />
+                            <StackPanel Orientation="Horizontal" Margin="0,2">
+                                <TextBlock Text="Measuring stations: " />
+                                <TextBlock Text="{Binding MeasuringStationCount}" />
+                            </StackPanel>
                         </StackPanel>
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
     </Grid>
  
     <!--ApplicationBar-->

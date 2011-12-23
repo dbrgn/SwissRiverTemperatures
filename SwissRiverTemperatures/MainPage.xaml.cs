@@ -34,13 +34,22 @@ namespace SwissRiverTemperatures
 
         private void UpdateData()
         {
-            HtmlWeb.LoadAsync(DataURL, (s, args) =>
+            EventHandler<HtmlDocumentLoadCompleted> documentLoadCompletedHandler = new EventHandler<HtmlDocumentLoadCompleted>(
+            (s, args) =>
             {
-                var rows = from row in args.Document.DocumentNode.Descendants("tr")
-                            where row.ParentNode.Id == "mainStationList" && row.Attributes["class"].Value.StartsWith("stationsListeBody")
-                            select row;
+                IEnumerable<HtmlNode> rows = System.Linq.Enumerable.Empty<HtmlNode>();
+                try
+                {
+                    rows = from row in args.Document.DocumentNode.Descendants("tr")
+                               where row.ParentNode.Id == "mainStationList" && row.Attributes["class"].Value.StartsWith("stationsListeBody")
+                               select row;
+                }
+                catch (NullReferenceException)
+                {
+                    // TODO show error
+                }
 
-                foreach(HtmlNode row in rows)
+                foreach (HtmlNode row in rows)
                 {
                     String[] cols = new String[10];
                     HtmlNode[] fields = row.Descendants("td").ToArray();
@@ -111,6 +120,19 @@ namespace SwissRiverTemperatures
                     river.AddMeasuringStation(station);
                 }
             });
+
+            try
+            {
+                HtmlWeb.LoadAsync(DataURL, documentLoadCompletedHandler);
+            }
+            catch (System.IO.FileNotFoundException)
+            {
+                Debug.WriteLine("filenotfound");
+            }
+            catch (System.Net.WebException)
+            {
+                Debug.WriteLine("webexc");
+            }
         }
 
         private void ApplicationBarIconButton_Click(object sender, EventArgs e)
