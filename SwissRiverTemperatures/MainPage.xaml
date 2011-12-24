@@ -24,15 +24,18 @@
         <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
             <TextBlock x:Name="ApplicationTitle" Text="swiss river temperatures" Style="{StaticResource PhoneTextNormalStyle}" Margin="0,0,12,0" />
             <TextBlock x:Name="PageTitle" Text="rivers" Margin="0,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
-            <ScrollViewer Height="23" Name="scrollViewer1" Width="120" />
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,30,0">
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="100*"/>
             </Grid.RowDefinitions>
-            <ListBox Name="RiverList" ItemsSource="{Binding}" HorizontalContentAlignment="Stretch" Margin="0" Grid.Row="1">
+            <StackPanel Name="ErrorPanel" Margin="0" Grid.Row="1" Visibility="Collapsed">
+                <TextBlock TextWrapping="Wrap" Foreground="Red">Error: Could not fetch data from the internet.</TextBlock>
+                <Button Name="ReloadButton" Content="Retry" HorizontalAlignment="Left" UseLayoutRounding="True" VerticalAlignment="Top" Click="ReloadButton_Click" Margin="0" Padding="10,3,10,5" IsEnabled="True" />
+            </StackPanel>
+            <ListBox Name="RiverList" ItemsSource="{Binding}" HorizontalContentAlignment="Stretch" Margin="0" Grid.Row="1" Tap="RiverList_Tap">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Vertical">

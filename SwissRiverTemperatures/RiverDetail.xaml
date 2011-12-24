@@ -1,0 +1,37 @@
+﻿<UserControl x:Class="SwissRiverTemperatures.RiverDetail"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    d:DesignHeight="696" d:DesignWidth="480">
+    
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="100*"/>
+        </Grid.RowDefinitions>
+        <!--TitlePanel contains the name of the application and page title-->
+        <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
+            <TextBlock x:Name="RiverName" Text="measuring stations" Style="{StaticResource PhoneTextNormalStyle}" Margin="0,0,12,0" />
+            <TextBlock x:Name="PageTitle" Text="{Binding}" Margin="0,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+        </StackPanel>
+        <ListBox Name="MeasuringStationList" ItemsSource="{Binding}" HorizontalContentAlignment="Stretch" Margin="12,0,0,0" Grid.Row="1">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Location}" Margin="0,2" HorizontalAlignment="Left" Style="{StaticResource PhoneTextLargeStyle}"/>
+                            <TextBlock Text=": " HorizontalAlignment="Left" Margin="0,2,5,2" Style="{StaticResource PhoneTextLargeStyle}"/>
+                            <TextBlock Text="{Binding CurrentTemperatureString}" Margin="0,2" HorizontalAlignment="Left" Style="{StaticResource PhoneTextLargeStyle}"/>
+                        </StackPanel>
+                        <TextBlock Text="{Binding LastUpdateAgo}" Margin="0,2" HorizontalAlignment="Left"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</UserControl>

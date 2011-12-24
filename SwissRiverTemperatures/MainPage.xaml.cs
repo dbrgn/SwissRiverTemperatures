@@ -14,6 +14,9 @@ using System.Collections.ObjectModel;
 using HtmlAgilityPack;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
+using System.Windows.Markup;
+using System.Xml;
 
 namespace SwissRiverTemperatures
 {
@@ -37,18 +40,31 @@ namespace SwissRiverTemperatures
             EventHandler<HtmlDocumentLoadCompleted> documentLoadCompletedHandler = new EventHandler<HtmlDocumentLoadCompleted>(
             (s, args) =>
             {
+                // Fetch rows
                 IEnumerable<HtmlNode> rows = System.Linq.Enumerable.Empty<HtmlNode>();
                 try
                 {
+                    // Rows LINQ query
                     rows = from row in args.Document.DocumentNode.Descendants("tr")
                                where row.ParentNode.Id == "mainStationList" && row.Attributes["class"].Value.StartsWith("stationsListeBody")
                                select row;
+
+                    // Restore riverlist visibility if necessary
+                    if (ErrorPanel.Visibility == Visibility.Visible)
+                    {
+                        ErrorPanel.Visibility = Visibility.Collapsed;
+                        RiverList.Visibility = Visibility.Visible;
+                    }
                 }
+                // Catch exception if fetching failed
                 catch (NullReferenceException)
                 {
-                    // TODO show error
+                    // Hide river list, show error panel
+                    RiverList.Visibility = Visibility.Collapsed;
+                    ErrorPanel.Visibility = Visibility.Visible;
                 }
 
+                // Parse rows
                 foreach (HtmlNode row in rows)
                 {
                     String[] cols = new String[10];
@@ -92,7 +108,7 @@ namespace SwissRiverTemperatures
                             temperatureUnit = Models.TemperatureUnit.KELVIN;
                             break;
                         default:
-                            temperatureUnit = "";
+                            temperatureUnit = cols[1];
                             break;
                     }
 
@@ -135,9 +151,25 @@ namespace SwissRiverTemperatures
             }
         }
 
+        #endregion
+
+        #region Click events
+
         private void ApplicationBarIconButton_Click(object sender, EventArgs e)
         {
             UpdateData();
+        }
+
+        private void ReloadButton_Click(object sender, RoutedEventArgs e)
+        {
+            UpdateData();
+        }
+
+        private void RiverList_Tap(object sender, GestureEventArgs e)
+        {
+            FrameworkElement root = Application.Current.RootVisual as FrameworkElement;
+            root.DataContext = RiverList.SelectedItem;
+            NavigationService.Navigate(new Uri("/RiverDetail.xaml", UriKind.RelativeOrAbsolute));
         }
 
         #endregion

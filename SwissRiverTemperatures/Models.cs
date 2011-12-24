@@ -27,19 +27,29 @@ namespace SwissRiverTemperatures
         /// </summary>
         public struct MeasuringStation
         {
-            public readonly String location;
-            public readonly String unit;
-            public readonly DateTime lastUpdate;
-            public readonly float currentTemperature;
-            public readonly float lastTemperature;
+            private String _location;
+            public String Location { get { return _location; } }
+            private String _unit;
+            private DateTime _lastUpdate;
+            public DateTime LastUpdate { get { return _lastUpdate; } }
+            public String LastUpdateAgo
+            {
+                get { return TimeAgo.Since(_lastUpdate); }
+            }
+            private float _currentTemperature;
+            public float CurrentTemperature { get { return _currentTemperature; } }
+            public String CurrentTemperatureString { get { return String.Format("{0:F2} {1}", _currentTemperature, _unit); } }
+            private float _lastTemperature;
+            public float LastTemperature { get { return _lastTemperature; } }
+            public String LastTemperatureString { get { return String.Format("{0:F2} {1}", _lastTemperature, _unit); } }
 
             public MeasuringStation(String location, DateTime lastUpdate, float currentTemperature, float lastTemperature, String unit = TemperatureUnit.CELSIUS)
             {
-                this.location = location;
-                this.unit = unit;
-                this.lastUpdate = lastUpdate;
-                this.currentTemperature = currentTemperature;
-                this.lastTemperature = lastTemperature;
+                this._location = location;
+                this._unit = unit;
+                this._lastUpdate = lastUpdate;
+                this._currentTemperature = currentTemperature;
+                this._lastTemperature = lastTemperature;
             }
         }
 
@@ -48,15 +58,21 @@ namespace SwissRiverTemperatures
         /// </summary>
         public class River
         {
-            private ObservableCollection<MeasuringStation> MeasuringStations = new ObservableCollection<MeasuringStation>();
+            private ObservableCollection<MeasuringStation> _measuringStations = new ObservableCollection<MeasuringStation>();
             public String Name
             {
                 get;
                 private set;
             }
+
+            public ObservableCollection<MeasuringStation> MeasuringStations
+            {
+                get { return this._measuringStations; }
+            }
+
             public int MeasuringStationCount
             {
-                get { return this.MeasuringStations.Count; }
+                get { return this._measuringStations.Count; }
             }
 
             public River(String name)
@@ -66,7 +82,7 @@ namespace SwissRiverTemperatures
 
             public void AddMeasuringStation(MeasuringStation station)
             {
-                this.MeasuringStations.Add(station);
+                this._measuringStations.Add(station);
             }
 
             public override String ToString()
