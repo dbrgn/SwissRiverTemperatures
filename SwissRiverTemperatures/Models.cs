@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Collections.ObjectModel;
+using System.Collections.Generic;
 
 namespace SwissRiverTemperatures
 {
@@ -25,31 +26,25 @@ namespace SwissRiverTemperatures
         /// <summary>
         /// A measuring station that reports temperature levels.
         /// </summary>
-        public struct MeasuringStation
+        public class MeasuringStation
         {
+            // Private fields
             private String _location;
-            public String Location { get { return _location; } }
             private String _unit;
-            private DateTime _lastUpdate;
-            public DateTime LastUpdate { get { return _lastUpdate; } }
-            public String LastUpdateAgo
-            {
-                get { return TimeAgo.Since(_lastUpdate); }
-            }
-            private float _currentTemperature;
-            public float CurrentTemperature { get { return _currentTemperature; } }
-            public String CurrentTemperatureString { get { return String.Format("{0:F2} {1}", _currentTemperature, _unit); } }
-            private float _lastTemperature;
-            public float LastTemperature { get { return _lastTemperature; } }
-            public String LastTemperatureString { get { return String.Format("{0:F2} {1}", _lastTemperature, _unit); } }
 
-            public MeasuringStation(String location, DateTime lastUpdate, float currentTemperature, float lastTemperature, String unit = TemperatureUnit.CELSIUS)
+            // Readonly properties
+            public String Location { get { return _location; } }
+            public String CurrentTemperatureString { get { return String.Format("{0:F2} {1}", CurrentTemperature, _unit); } }
+            public String LastUpdateAgo { get { return TimeAgo.Since(LastUpdate); } }
+
+            // Writeable properties
+            public DateTime LastUpdate { get; set; }
+            public float CurrentTemperature { get; set; }
+            
+            public MeasuringStation(String location, String unit = TemperatureUnit.CELSIUS)
             {
                 this._location = location;
                 this._unit = unit;
-                this._lastUpdate = lastUpdate;
-                this._currentTemperature = currentTemperature;
-                this._lastTemperature = lastTemperature;
             }
         }
 
