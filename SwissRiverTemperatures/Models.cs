@@ -48,7 +48,15 @@ namespace SwissRiverTemperatures
             public DateTime LastUpdate { get; set; }
             public float CurrentTemperature { get; set; }
             public String Unit { get; set; }
-            public BitmapImage Diagram { get { return _diagram; } set { _diagram = value; OnPropertyChanged("Diagram"); } }
+            public BitmapImage Diagram {
+                get { return _diagram; }
+                set
+                {
+                    _diagram = value;
+                    OnPropertyChanged("Diagram");
+                    OnPropertyChanged("DiagramVisibility");
+                }
+            }
             
             // Events
             public event PropertyChangedEventHandler PropertyChanged;
@@ -58,17 +66,13 @@ namespace SwissRiverTemperatures
                 this._id = id;
                 this._location = location;
                 this.Unit = unit;
-                PropertyChanged += new PropertyChangedEventHandler((sender, args) => Debug.WriteLine("Property changed event fired."));
             }
 
             protected void OnPropertyChanged(string propertyName)
             {
-                PropertyChangedEventHandler @event = PropertyChanged;
-                if (@event != null)
-                    @event(
-                        this,
-                        new PropertyChangedEventArgs(propertyName ?? string.Empty)
-                        );
+                PropertyChangedEventHandler propertyChangedEvent = PropertyChanged;
+                if (propertyChangedEvent != null)
+                    propertyChangedEvent(this, new PropertyChangedEventArgs(propertyName ?? string.Empty));
             }
 
         }
@@ -78,31 +82,17 @@ namespace SwissRiverTemperatures
         /// </summary>
         public class River
         {
+            public String Name { get; private set; }
             private ObservableCollection<MeasuringStation> _measuringStations = new ObservableCollection<MeasuringStation>();
-            public String Name
-            {
-                get;
-                private set;
+            public ObservableCollection<MeasuringStation> MeasuringStations {
+                get { return _measuringStations; }
+                set { _measuringStations = value; }
             }
-
-            public ObservableCollection<MeasuringStation> MeasuringStations
-            {
-                get { return this._measuringStations; }
-            }
-
-            public int MeasuringStationCount
-            {
-                get { return this._measuringStations.Count; }
-            }
+            public int MeasuringStationCount { get { return MeasuringStations.Count; } }
 
             public River(String name)
             {
                 this.Name = name;
-            }
-
-            public void AddMeasuringStation(MeasuringStation station)
-            {
-                this._measuringStations.Add(station);
             }
 
             public override String ToString()

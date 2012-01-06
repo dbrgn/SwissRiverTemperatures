@@ -32,9 +32,6 @@ namespace SwissRiverTemperatures
             // Set data bindings
             PivotElement.Title = _river.Name;
             PivotElement.DataContext = _river.MeasuringStations;
-
-            // Get screen size
-            //Size screenSize = Application.Current.RootVisual.RenderSize;
         }
 
         private void PivotElement_LoadedPivotItem(object sender, PivotItemEventArgs e)
@@ -46,11 +43,15 @@ namespace SwissRiverTemperatures
             // If diagram hasn't been loaded yet, start async call to fetch it
             if (station.Diagram == null)
             {
+                // Get diagram request url
+                const string url = "{0}{1}/datastreams/{2}.png?width={3}&height={4}&colour=F15A24&duration=24hours&detailed_grid=true&show_axis_labels=true&title=&timezone=UTC+1";
+                int width = Convert.ToInt32(PivotElement.ActualWidth - PivotElement.Margin.Left - PivotElement.Margin.Right);
+                int height = width/4*3;
+
+                // Create web request
                 var wc = new WebClient();
-                const string url =
-                    "{0}{1}/datastreams/{2}.png?width={3}&height={4}&colour=F15A24&duration=24hours&detailed_grid=true&show_axis_labels=true&timezone=UTC+1";
                 wc.OpenReadCompleted += new OpenReadCompletedEventHandler((a, b) => wc_LoadingDiagramCompleted(a, b, station));
-                wc.OpenReadAsync(new Uri(String.Format(url, API.BaseUrl, API.FeedId, station.Id, 500, 300)));
+                wc.OpenReadAsync(new Uri(String.Format(url, API.BaseUrl, API.FeedId, station.Id, width, height)));
                 Debug.WriteLine("Diagram async call started.");
             }
         }
@@ -68,9 +69,6 @@ namespace SwissRiverTemperatures
                 var bitmap = new BitmapImage();
                 bitmap.SetSource(e.Result);
                 station.Diagram = bitmap;
-                Debug.WriteLine("Updated diagram in sender (param)!");
-                Debug.WriteLine("Original diagram: " + _river.MeasuringStations.Single(s => s.Id == station.Id).Diagram.ToString());
-                Debug.WriteLine("Parameter diagram: " + station.Diagram.ToString());
             }
         }
     }

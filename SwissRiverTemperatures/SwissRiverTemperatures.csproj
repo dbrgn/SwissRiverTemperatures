@@ -102,6 +102,9 @@
     <Content Include="Images\appbar.refresh.rest.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Images\icon-173.png" />
+    <Resource Include="Images\icon-200.png" />
+    <Resource Include="Images\icon-99.png" />
     <Content Include="SplashScreenImage.jpg" />
   </ItemGroup>
   <ItemGroup />

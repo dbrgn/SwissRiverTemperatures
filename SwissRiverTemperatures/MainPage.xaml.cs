@@ -32,8 +32,6 @@ namespace SwissRiverTemperatures
             InitializeComponent();
             RiverList.DataContext = Rivers;
 
-            Rivers.CollectionChanged += (sender, args) => Debug.WriteLine("Collection changed!");
-
             // Initialize webclient
             _wc = new WebClient();
             _wc.Headers["X-PachubeApiKey"] = API.Key;
@@ -68,7 +66,8 @@ namespace SwissRiverTemperatures
                         String label = (from n in datastream.Nodes()
                                           where ((XElement)n).Name == ns + "tag"
                                           select ((XElement)n).Value).Single();
-                        String riverName = label.Split('-')[0].Trim();
+                        int labelPos = label.IndexOf('-');
+                        String riverName = label.Substring(0, labelPos).Trim();
 
                         // Get or create river object
                         Models.River river = Rivers.Where(r => r.Name == riverName).DefaultIfEmpty(new Models.River(riverName)).Single();
@@ -79,18 +78,37 @@ namespace SwissRiverTemperatures
 
                         // Retrieve station data
                         String id = datastream.Attribute("id").Value;
-                        String location = label.Split('-')[1].Trim();
+                        String location = label.Substring(labelPos+1).Trim();
                         var station = new Models.MeasuringStation(id, location);
-                        var currentValueNodes = datastream.Nodes().Where(n => ((XElement)n).Name == ns + "current_value");
-                        if (currentValueNodes.Any())
+                        try
                         {
-                            var currentValueNode = (XElement)currentValueNodes.Single();
+                            // Parse data
+                            var currentValueNode = datastream.Nodes().Single(n => ((XElement) n).Name == ns + "current_value") as XElement;
                             station.CurrentTemperature = float.Parse(currentValueNode.Value);
-                            Debug.WriteLine(location + ": " + currentValueNode.Attribute("at").Value);
                             station.LastUpdate = DateTime.Parse(currentValueNode.Attribute("at").Value);
 
-                            // Create and add measuring station
-                            river.AddMeasuringStation(station);
+                            // Create and add or update measuring station
+                            var measuringStations = river.MeasuringStations.Where(s => s.Id == id);
+                            if (measuringStations.Any())
+                            {
+                                // Replace current station
+                                int index = river.MeasuringStations.IndexOf(measuringStations.Single());
+                                river.MeasuringStations[index] = station;
+                            } else
+                            {
+                                // Add new station
+                                river.MeasuringStations.Add(station);
+                            }
+                        }
+                        catch (InvalidOperationException ex)
+                        {
+                            Debug.WriteLine("InvalidOperationException: " + ex.Message);
+                            Debug.WriteLine(ex.StackTrace);
+                        }
+                        catch (NullReferenceException ex)
+                        {
+                            Debug.WriteLine("NullReferenceException: " + ex.Message);
+                            Debug.WriteLine(ex.StackTrace);
                         }
                     }
 

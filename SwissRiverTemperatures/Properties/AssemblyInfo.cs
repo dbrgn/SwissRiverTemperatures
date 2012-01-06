@@ -7,11 +7,11 @@ using System.Resources;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("SwissRiverTemperatures")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Display Swiss river temperature data")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("SwissRiverTemperatures")]
-[assembly: AssemblyCopyright("Copyright ©  2011")]
+[assembly: AssemblyCopyright("Copyright © 2011 Danilo Bargen")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

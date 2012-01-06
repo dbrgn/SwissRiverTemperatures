@@ -17,10 +17,12 @@
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot">
         <Grid.RowDefinitions>
-            <RowDefinition Height="100*"/>
+            <RowDefinition />
         </Grid.RowDefinitions>
        
-        <controls:Pivot Name="PivotElement" Title="{Binding Location}" ItemsSource="{Binding}" Grid.Row="0" Grid.Column="0" LoadedPivotItem="PivotElement_LoadedPivotItem">
+        <controls:Pivot Name="PivotElement" Title="{Binding Location}" ItemsSource="{Binding}"
+                        Grid.Row="0" Grid.Column="0" Margin="-8,0,0,0"
+                        LoadedPivotItem="PivotElement_LoadedPivotItem">
             <controls:Pivot.HeaderTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Location}"/>
@@ -28,7 +30,7 @@
             </controls:Pivot.HeaderTemplate>
             <controls:Pivot.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
+                    <Grid Margin="12,0,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="7"/>
@@ -37,20 +39,20 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="15" />
                             <RowDefinition Height="100*"/>
                         </Grid.RowDefinitions>
 
-                        <TextBlock Text="Last update" FontWeight="SemiBold" Grid.Row="0" Grid.Column="0"/>
-                        <TextBlock Text="{Binding LastUpdateAgo}" Grid.Row="0" Grid.Column="2"/>
+                        <TextBlock Text="Temperature" FontWeight="SemiBold" Grid.Row="0" Grid.Column="0"/>
+                        <TextBlock Text="{Binding CurrentTemperatureString}" Grid.Row="0" Grid.Column="2"/>
+                        
+                        <TextBlock Text="Last update" FontWeight="SemiBold" Grid.Row="1" Grid.Column="0"/>
+                        <TextBlock Text="{Binding LastUpdateAgo}" Grid.Row="1" Grid.Column="2"/>
 
-                        <TextBlock Text="Current Temperature" FontWeight="SemiBold" Grid.Row="1" Grid.Column="0"/>
-                        <TextBlock Text="{Binding CurrentTemperatureString}" Grid.Row="1" Grid.Column="2"/>
-
-                        <TextBlock Text="Temperature" FontWeight="SemiBold" Grid.Row="2" Grid.Column="0"/>
-                        <TextBlock Text="{Binding CurrentTemperatureString}" Grid.Row="2" Grid.Column="2"/>
-
-                        <TextBlock Text="Diagram" Visibility="{Binding DiagramVisibility}" Grid.Row="3" Grid.Column="3"/>
+                        <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3">
+                            <TextBlock Text="Last 24h temperature change" FontWeight="SemiBold"/>
+                            <Image Source="{Binding Diagram}" Visibility="{Binding DiagramVisibility}"/>
+                        </StackPanel>
                     </Grid>
                 </DataTemplate>
             </controls:Pivot.ItemTemplate>
