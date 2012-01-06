@@ -25,38 +25,34 @@ namespace SwissRiverTemperatures
     public partial class MainPage : PhoneApplicationPage
     {
         public ObservableCollection<Models.River> Rivers = new ObservableCollection<Models.River>();
-        private WebClient wc;
-
-        // The following dontCacheMe parameter is used to prevent local caching. See http://stackoverflow.com/q/5173052/284318
-        private const String apiUrl = "http://api.pachube.com/v2/feeds/43397.xml?dontCacheMe={0}";
+        private readonly WebClient _wc;
 
         public MainPage()
         {
             InitializeComponent();
             RiverList.DataContext = Rivers;
 
+            Rivers.CollectionChanged += (sender, args) => Debug.WriteLine("Collection changed!");
+
             // Initialize webclient
-            wc = new WebClient();
-            wc.Headers["X-PachubeApiKey"] = "FrhPnATeSS0dlM1tGooOHOpS1zSGcRFDczGYwuDCWoAy4ZtZ5hP5wa2pXeMHwOZ9ODG6Er5nhyfWm4AFU3E4DW41f3wtcGNMg26QZepSkAFcrEdDbCUQf82ZNTz4wUEs";
-            wc.Headers["Accept"] = "text/xml";
-            wc.OpenReadCompleted += new OpenReadCompletedEventHandler(wc_OpenReadCompleted);
+            _wc = new WebClient();
+            _wc.Headers["X-PachubeApiKey"] = API.Key;
+            _wc.Headers["Accept"] = "text/xml";
+            _wc.OpenReadCompleted += new OpenReadCompletedEventHandler(_wc_OpenReadCompleted);
             UpdateData();
         }
-
-        #region DataParsing
 
         private void UpdateData()
         {
             // Make an asynchronous REST GET request
-            wc.OpenReadAsync(new Uri(String.Format(apiUrl, DateTime.Now)));
+            _wc.OpenReadAsync(new Uri(String.Format(API.FeedUrl, DateTime.Now)));
         }
 
-        void wc_OpenReadCompleted(object sender, OpenReadCompletedEventArgs e)
+        void _wc_OpenReadCompleted(object sender, OpenReadCompletedEventArgs e)
         {
-            XElement resultXml;
-
             if (e.Error != null)
             {
+                Debug.WriteLine("Unsucessfull request");
                 Debug.WriteLine(e.Error);
                 return; // TODO handle
             }
@@ -64,9 +60,9 @@ namespace SwissRiverTemperatures
             {
                 try
                 {
-                    resultXml = XElement.Load(e.Result);
+                    XElement resultXml = XElement.Load(e.Result);
                     XNamespace ns = resultXml.GetDefaultNamespace();
-                    foreach (var datastream in resultXml.Descendants(ns + "data"))
+                    foreach (XElement datastream in resultXml.Descendants(ns + "data"))
                     {
                         // Retrieve river data
                         String label = (from n in datastream.Nodes()
@@ -82,12 +78,13 @@ namespace SwissRiverTemperatures
                         }
 
                         // Retrieve station data
+                        String id = datastream.Attribute("id").Value;
                         String location = label.Split('-')[1].Trim();
-                        Models.MeasuringStation station = new Models.MeasuringStation(location);
+                        var station = new Models.MeasuringStation(id, location);
                         var currentValueNodes = datastream.Nodes().Where(n => ((XElement)n).Name == ns + "current_value");
-                        if (currentValueNodes.Count() > 0)
+                        if (currentValueNodes.Any())
                         {
-                            XElement currentValueNode = (XElement)currentValueNodes.Single();
+                            var currentValueNode = (XElement)currentValueNodes.Single();
                             station.CurrentTemperature = float.Parse(currentValueNode.Value);
                             Debug.WriteLine(location + ": " + currentValueNode.Attribute("at").Value);
                             station.LastUpdate = DateTime.Parse(currentValueNode.Attribute("at").Value);
@@ -107,10 +104,6 @@ namespace SwissRiverTemperatures
             }
         }
 
-        #endregion
-
-        #region Click events
-
         private void ApplicationBarIconButton_Click(object sender, EventArgs e)
         {
             UpdateData();
@@ -123,11 +116,9 @@ namespace SwissRiverTemperatures
 
         private void RiverList_Tap(object sender, GestureEventArgs e)
         {
-            FrameworkElement root = Application.Current.RootVisual as FrameworkElement;
+            var root = Application.Current.RootVisual as FrameworkElement;
             root.DataContext = RiverList.SelectedItem;
             NavigationService.Navigate(new Uri("/RiverDetail.xaml", UriKind.RelativeOrAbsolute));
         }
-
-        #endregion
     }
 }

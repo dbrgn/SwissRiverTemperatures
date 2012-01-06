@@ -1,37 +1,60 @@
-﻿<UserControl x:Class="SwissRiverTemperatures.RiverDetail"
+﻿<phone:PhoneApplicationPage 
+    x:Class="SwissRiverTemperatures.RiverDetail"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
-    d:DesignHeight="696" d:DesignWidth="480">
-    
-    <Grid x:Name="LayoutRoot" Background="Transparent">
+    SupportedOrientations="Portrait"  Orientation="Portrait"
+    shell:SystemTray.IsVisible="True">
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="100*"/>
         </Grid.RowDefinitions>
-        <!--TitlePanel contains the name of the application and page title-->
-        <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock x:Name="RiverName" Text="measuring stations" Style="{StaticResource PhoneTextNormalStyle}" Margin="0,0,12,0" />
-            <TextBlock x:Name="PageTitle" Text="{Binding}" Margin="0,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
-        </StackPanel>
-        <ListBox Name="MeasuringStationList" ItemsSource="{Binding}" HorizontalContentAlignment="Stretch" Margin="12,0,0,0" Grid.Row="1">
-            <ListBox.ItemTemplate>
+       
+        <controls:Pivot Name="PivotElement" Title="{Binding Location}" ItemsSource="{Binding}" Grid.Row="0" Grid.Column="0" LoadedPivotItem="PivotElement_LoadedPivotItem">
+            <controls:Pivot.HeaderTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Vertical">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Location}" Margin="0,2" HorizontalAlignment="Left" Style="{StaticResource PhoneTextLargeStyle}"/>
-                            <TextBlock Text=": " HorizontalAlignment="Left" Margin="0,2,5,2" Style="{StaticResource PhoneTextLargeStyle}"/>
-                            <TextBlock Text="{Binding CurrentTemperatureString}" Margin="0,2" HorizontalAlignment="Left" Style="{StaticResource PhoneTextLargeStyle}"/>
-                        </StackPanel>
-                        <TextBlock Text="{Binding LastUpdateAgo}" Margin="0,2" HorizontalAlignment="Left"/>
-                    </StackPanel>
+                    <TextBlock Text="{Binding Location}"/>
                 </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+            </controls:Pivot.HeaderTemplate>
+            <controls:Pivot.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="7"/>
+                            <ColumnDefinition Width="100*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="100*"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="Last update" FontWeight="SemiBold" Grid.Row="0" Grid.Column="0"/>
+                        <TextBlock Text="{Binding LastUpdateAgo}" Grid.Row="0" Grid.Column="2"/>
+
+                        <TextBlock Text="Current Temperature" FontWeight="SemiBold" Grid.Row="1" Grid.Column="0"/>
+                        <TextBlock Text="{Binding CurrentTemperatureString}" Grid.Row="1" Grid.Column="2"/>
+
+                        <TextBlock Text="Temperature" FontWeight="SemiBold" Grid.Row="2" Grid.Column="0"/>
+                        <TextBlock Text="{Binding CurrentTemperatureString}" Grid.Row="2" Grid.Column="2"/>
+
+                        <TextBlock Text="Diagram" Visibility="{Binding DiagramVisibility}" Grid.Row="3" Grid.Column="3"/>
+                    </Grid>
+                </DataTemplate>
+            </controls:Pivot.ItemTemplate>
+        </controls:Pivot>
     </Grid>
-</UserControl>
+
+</phone:PhoneApplicationPage>

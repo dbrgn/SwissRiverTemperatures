@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Net;
 using System.Windows;
 using System.Windows.Controls;
@@ -7,6 +9,7 @@ using System.Windows.Ink;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
@@ -18,34 +21,56 @@ namespace SwissRiverTemperatures
         public struct TemperatureUnit
         {
             // TODO: Create some kind of string enum
-            public const String CELSIUS = "°C";
-            public const String FAHRENHEIT = "°F";
-            public const String KELVIN = "°K";
+            public const String Celsius = "°C";
+            public const String Fahrenheit = "°F";
+            public const String Kelvin = "°K";
         }
 
         /// <summary>
         /// A measuring station that reports temperature levels.
         /// </summary>
-        public class MeasuringStation
+        public class MeasuringStation : INotifyPropertyChanged
         {
             // Private fields
-            private String _location;
-            private String _unit;
+            private readonly String _location;
+            private readonly String _id;
+            private BitmapImage _diagram;
 
             // Readonly properties
+            public String Id { get { return _id;  } }
             public String Location { get { return _location; } }
-            public String CurrentTemperatureString { get { return String.Format("{0:F2} {1}", CurrentTemperature, _unit); } }
+            public String CurrentTemperatureString { get { return String.Format("{0:F2} {1}", CurrentTemperature, Unit); } }
             public String LastUpdateAgo { get { return TimeAgo.Since(LastUpdate); } }
+            public Visibility DiagramVisibility { get { return Diagram == null ? Visibility.Collapsed : Visibility.Visible; }
+            }
 
             // Writeable properties
             public DateTime LastUpdate { get; set; }
             public float CurrentTemperature { get; set; }
+            public String Unit { get; set; }
+            public BitmapImage Diagram { get { return _diagram; } set { _diagram = value; OnPropertyChanged("Diagram"); } }
             
-            public MeasuringStation(String location, String unit = TemperatureUnit.CELSIUS)
+            // Events
+            public event PropertyChangedEventHandler PropertyChanged;
+
+            public MeasuringStation(String id, String location, String unit = TemperatureUnit.Celsius)
             {
+                this._id = id;
                 this._location = location;
-                this._unit = unit;
+                this.Unit = unit;
+                PropertyChanged += new PropertyChangedEventHandler((sender, args) => Debug.WriteLine("Property changed event fired."));
             }
+
+            protected void OnPropertyChanged(string propertyName)
+            {
+                PropertyChangedEventHandler @event = PropertyChanged;
+                if (@event != null)
+                    @event(
+                        this,
+                        new PropertyChangedEventArgs(propertyName ?? string.Empty)
+                        );
+            }
+
         }
 
         /// <summary>
