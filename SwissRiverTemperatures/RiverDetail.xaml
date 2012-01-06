@@ -6,19 +6,23 @@
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-    mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:src="clr-namespace:SwissRiverTemperatures" mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait"  Orientation="Portrait"
     shell:SystemTray.IsVisible="True">
-
+    
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot">
         <Grid.RowDefinitions>
             <RowDefinition />
         </Grid.RowDefinitions>
+        
+        <Grid.Resources>
+            <src:BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter"/>
+        </Grid.Resources>
        
         <controls:Pivot Name="PivotElement" Title="{Binding Location}" ItemsSource="{Binding}"
                         Grid.Row="0" Grid.Column="0" Margin="-8,0,0,0"
@@ -51,7 +55,14 @@
 
                         <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3">
                             <TextBlock Text="Last 24h temperature change" FontWeight="SemiBold"/>
-                            <Image Source="{Binding Diagram}" Visibility="{Binding DiagramVisibility}"/>
+                            <StackPanel Name="LoadingStatus" Orientation="Vertical" Grid.Row="1">
+                                <StackPanel.Visibility>
+                                    <Binding Path="DiagramAvailable" Converter="{StaticResource booleanToVisibilityConverter}" ConverterParameter="true"/>
+                                </StackPanel.Visibility>
+                                <TextBlock Text="Loading diagram..."/>
+                                <ProgressBar Margin="0,5,0,0" Height="30" IsIndeterminate="True" />
+                            </StackPanel>
+                            <Image Source="{Binding Diagram}" Visibility="{Binding DiagramAvailable, Converter={StaticResource booleanToVisibilityConverter}}"/>
                         </StackPanel>
                     </Grid>
                 </DataTemplate>

@@ -31,11 +31,23 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="100*"/>
             </Grid.RowDefinitions>
-            <StackPanel Name="ErrorPanel" Margin="0" Grid.Row="1" Visibility="Collapsed">
-                <TextBlock TextWrapping="Wrap" Foreground="Red">Error: Could not fetch data from the internet.</TextBlock>
-                <Button Name="ReloadButton" Content="Retry" HorizontalAlignment="Left" UseLayoutRounding="True" VerticalAlignment="Top" Click="ReloadButton_Click" Margin="0" Padding="10,3,10,5" IsEnabled="True" />
+
+            <StackPanel Name="LoadingStatus" Orientation="Vertical" Grid.Row="1" Visibility="Collapsed">
+                <TextBlock Text="Loading data..."/>
+                <ProgressBar Margin="0,5,0,0" Height="30" IsIndeterminate="True" />
             </StackPanel>
-            <ListBox Name="RiverList" ItemsSource="{Binding}" HorizontalContentAlignment="Stretch" Margin="0" Grid.Row="1" Tap="RiverList_Tap">
+
+            <TextBlock Name="ConnectionError" TextWrapping="Wrap" Foreground="Red" Grid.Row="1" Visibility="Collapsed">
+                Error: Could not connect to the internet. Press verify that the internet connection is available
+                and press the refresh button to retry.
+            </TextBlock>
+
+            <TextBlock Name="ParseError" TextWrapping="Wrap" Foreground="Red" Grid.Row="1" Visibility="Collapsed">
+                Error: Could not process temperature data. Press press the refresh button to retry.
+            </TextBlock>
+
+            <ListBox Name="RiverList" ItemsSource="{Binding}" Tap="RiverList_Tap"
+                     HorizontalContentAlignment="Stretch" Margin="0" Grid.Row="1" Visibility="Collapsed">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Vertical">

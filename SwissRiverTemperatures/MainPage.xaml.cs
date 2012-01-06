@@ -1,22 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Globalization;
-using System.IO;
-using System.Windows.Markup;
 using System.Xml;
-using System.Text;
 using System.Xml.Linq;
 
 namespace SwissRiverTemperatures
@@ -40,19 +31,36 @@ namespace SwissRiverTemperatures
             UpdateData();
         }
 
+        private enum StatusOptions { Connecting, ConnectionError, ParseError, Ok }
+        private void UpdateVisibility(StatusOptions status)
+        {
+            LoadingStatus.Visibility = (status == StatusOptions.Connecting) ? Visibility.Visible : Visibility.Collapsed;
+            ConnectionError.Visibility = (status == StatusOptions.ConnectionError) ? Visibility.Visible : Visibility.Collapsed;
+            ParseError.Visibility = (status == StatusOptions.ParseError) ? Visibility.Visible : Visibility.Collapsed;
+            RiverList.Visibility = (status == StatusOptions.Ok) ? Visibility.Visible : Visibility.Collapsed;
+        }
+
         private void UpdateData()
         {
             // Make an asynchronous REST GET request
-            _wc.OpenReadAsync(new Uri(String.Format(API.FeedUrl, DateTime.Now)));
+            if (NetworkInterface.GetIsNetworkAvailable())
+            {
+                _wc.OpenReadAsync(new Uri(String.Format(API.FeedUrl, DateTime.Now)));
+                UpdateVisibility(StatusOptions.Connecting);
+            }
+            else
+            {
+                UpdateVisibility(StatusOptions.ConnectionError);
+            }
         }
 
         void _wc_OpenReadCompleted(object sender, OpenReadCompletedEventArgs e)
         {
             if (e.Error != null)
             {
-                Debug.WriteLine("Unsucessfull request");
+                UpdateVisibility(StatusOptions.ParseError);
                 Debug.WriteLine(e.Error);
-                return; // TODO handle
+                return;
             }
             else
             {
@@ -111,14 +119,16 @@ namespace SwissRiverTemperatures
                             Debug.WriteLine(ex.StackTrace);
                         }
                     }
-
-                    return;
                 }
                 catch (XmlException ex)
                 {
                     Debug.WriteLine(ex.StackTrace);
-                    return; // TODO handle
+                    UpdateVisibility(StatusOptions.ParseError);
+                    return;
                 }
+
+                // Parsing seems to have worked. Update view.
+                UpdateVisibility(StatusOptions.Ok);
             }
         }
 
