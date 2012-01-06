@@ -106,6 +106,7 @@
     <Resource Include="Images\icon-173.png" />
     <Resource Include="Images\icon-200.png" />
     <Resource Include="Images\icon-99.png" />
+    <Resource Include="Images\icon-62.png" />
     <Content Include="SplashScreenImage.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
