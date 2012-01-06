@@ -148,5 +148,12 @@ namespace SwissRiverTemperatures
             root.DataContext = RiverList.SelectedItem;
             NavigationService.Navigate(new Uri("/RiverDetail.xaml", UriKind.RelativeOrAbsolute));
         }
+
+        private void ApplicationBarMenuItem_Click(object sender, EventArgs e)
+        {
+            var root = Application.Current.RootVisual as FrameworkElement;
+            root.DataContext = RiverList.SelectedItem;
+            NavigationService.Navigate(new Uri("/About.xaml", UriKind.RelativeOrAbsolute));
+        }
     }
 }

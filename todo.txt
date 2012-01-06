@@ -1,4 +1,2 @@
-- loading animation
-- about box
 - sorting of rivers
 - favorites
