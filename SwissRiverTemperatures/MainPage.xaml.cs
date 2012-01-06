@@ -107,6 +107,10 @@ namespace SwissRiverTemperatures
                                 // Add new station
                                 river.MeasuringStations.Add(station);
                             }
+
+                            // Sort measuring stations
+                            if (river.MeasuringStations.Count > 1)
+                                river.MeasuringStations = new ObservableCollection<Models.MeasuringStation>(river.MeasuringStations.OrderBy(ms => ms.Location));
                         }
                         catch (InvalidOperationException ex)
                         {
@@ -127,6 +131,10 @@ namespace SwissRiverTemperatures
                     return;
                 }
 
+                // Sort rivers
+                Rivers = new ObservableCollection<Models.River>(Rivers.OrderBy(r => r.Name));
+                RiverList.DataContext = Rivers;
+
                 // Parsing seems to have worked. Update view.
                 UpdateVisibility(StatusOptions.Ok);
             }
@@ -137,14 +145,10 @@ namespace SwissRiverTemperatures
             UpdateData();
         }
 
-        private void ReloadButton_Click(object sender, RoutedEventArgs e)
-        {
-            UpdateData();
-        }
-
         private void RiverList_Tap(object sender, GestureEventArgs e)
         {
             var root = Application.Current.RootVisual as FrameworkElement;
+            if (root == null) return;
             root.DataContext = RiverList.SelectedItem;
             NavigationService.Navigate(new Uri("/RiverDetail.xaml", UriKind.RelativeOrAbsolute));
         }
@@ -152,6 +156,7 @@ namespace SwissRiverTemperatures
         private void ApplicationBarMenuItem_Click(object sender, EventArgs e)
         {
             var root = Application.Current.RootVisual as FrameworkElement;
+            if (root == null) return;
             root.DataContext = RiverList.SelectedItem;
             NavigationService.Navigate(new Uri("/About.xaml", UriKind.RelativeOrAbsolute));
         }

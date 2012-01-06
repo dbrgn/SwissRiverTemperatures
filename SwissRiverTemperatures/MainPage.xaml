@@ -54,7 +54,7 @@
                             <TextBlock Text="{Binding Name}" Margin="0,2" Style="{StaticResource PhoneTextLargeStyle}" />
                             <StackPanel Orientation="Horizontal" Margin="0,2">
                                 <TextBlock Text="Measuring stations: " />
-                                <TextBlock Text="{Binding MeasuringStationCount}" />
+                                <TextBlock Text="{Binding MeasuringStations.Count}" />
                             </StackPanel>
                         </StackPanel>
                     </DataTemplate>

@@ -38,7 +38,6 @@ namespace SwissRiverTemperatures
         {
             // Get current station
             var station = e.Item.DataContext as Models.MeasuringStation;
-            Debug.WriteLine("Loading pivot item " + station.Id);
 
             // If diagram hasn't been loaded yet, start async call to fetch it
             if (station.Diagram == null)
@@ -52,13 +51,11 @@ namespace SwissRiverTemperatures
                 var wc = new WebClient();
                 wc.OpenReadCompleted += new OpenReadCompletedEventHandler((a, b) => wc_LoadingDiagramCompleted(a, b, station));
                 wc.OpenReadAsync(new Uri(String.Format(url, API.BaseUrl, API.FeedId, station.Id, width, height)));
-                Debug.WriteLine("Diagram async call started.");
             }
         }
 
         private void wc_LoadingDiagramCompleted(object sender, OpenReadCompletedEventArgs e, Models.MeasuringStation station)
         {
-            Debug.WriteLine("Diagram call complete!");
             if (e.Error != null)
             {
                 Debug.WriteLine(e.Error);

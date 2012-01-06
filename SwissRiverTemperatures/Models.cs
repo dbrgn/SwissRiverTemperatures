@@ -79,16 +79,10 @@ namespace SwissRiverTemperatures
                 get { return _measuringStations; }
                 set { _measuringStations = value; }
             }
-            public int MeasuringStationCount { get { return MeasuringStations.Count; } }
 
             public River(String name)
             {
                 this.Name = name;
-            }
-
-            public override String ToString()
-            {
-                return this.Name + " (" + this.MeasuringStationCount + ")";
             }
         }
     }
