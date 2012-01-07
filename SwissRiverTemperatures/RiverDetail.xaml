@@ -7,7 +7,8 @@
     xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:src="clr-namespace:SwissRiverTemperatures" mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768"
+    xmlns:src="clr-namespace:SwissRiverTemperatures" xmlns:Ads="clr-namespace:MobFox.Ads;assembly=MobFox.Ads"
+    mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
@@ -18,6 +19,7 @@
     <Grid x:Name="LayoutRoot">
         <Grid.RowDefinitions>
             <RowDefinition />
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         
         <Grid.Resources>
@@ -45,6 +47,7 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="15" />
                             <RowDefinition Height="100*"/>
+                            <RowDefinition Height="80" />
                         </Grid.RowDefinitions>
 
                         <TextBlock Text="Temperature" FontWeight="SemiBold" Grid.Row="0" Grid.Column="0"/>
@@ -55,7 +58,7 @@
 
                         <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3">
                             <TextBlock Text="Last 24h temperature change" FontWeight="SemiBold"/>
-                            <StackPanel Name="LoadingStatus" Orientation="Vertical" Grid.Row="1">
+                            <StackPanel Name="LoadingStatus" Orientation="Vertical">
                                 <StackPanel.Visibility>
                                     <Binding Path="DiagramAvailable" Converter="{StaticResource booleanToVisibilityConverter}" ConverterParameter="true"/>
                                 </StackPanel.Visibility>
@@ -68,6 +71,8 @@
                 </DataTemplate>
             </controls:Pivot.ItemTemplate>
         </controls:Pivot>
+        <Ads:AdControl Grid.Row="1" Width="480" Height="70" Margin="0,5,0,5" VerticalAlignment="Bottom"
+            Name="MobFoxAdControl" PublisherID="403dbcf4bb1aab3d90c9831f5c3ad0d7" AlwaysShowAdsWhenDebuggerAttached="True" />
     </Grid>
 
 </phone:PhoneApplicationPage>
