@@ -11,13 +11,15 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait" Orientation="Portrait"
-    shell:SystemTray.IsVisible="True">
+    shell:SystemTray.IsVisible="True" xmlns:my="clr-namespace:Microsoft.Advertising.Mobile.UI;assembly=Microsoft.Advertising.Mobile.UI"
+    xmlns:Ads="clr-namespace:MobFox.Ads;assembly=MobFox.Ads">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="100*" />
+            <RowDefinition Height="80" />
         </Grid.RowDefinitions>
 
         <!--TitlePanel contains the name of the application and page title-->
@@ -61,6 +63,7 @@
                 </ListBox.ItemTemplate>
             </ListBox>
         </Grid>
+        <Ads:AdControl Grid.Row="2" Width="480" Height="70" Margin="0,5,0,5" Name="MobFoxAdControl" VerticalAlignment="Bottom" PublisherID="403dbcf4bb1aab3d90c9831f5c3ad0d7" AlwaysShowAdsWhenDebuggerAttached="True" />
     </Grid>
  
     <!--ApplicationBar-->
