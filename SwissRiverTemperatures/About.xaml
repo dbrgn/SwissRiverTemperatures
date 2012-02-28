@@ -29,7 +29,7 @@
         <!--ContentPanel - place additional content here-->
         <StackPanel x:Name="ContentPanel" Grid.Row="1" Margin="12,0,0,0">
             <TextBlock TextWrapping="Wrap">
-                © 2011 by Danilo Bargen<LineBreak/>
+                © 2011-2012 by Danilo Bargen<LineBreak/>
                 http://ich-wars-nicht.ch/
                 <LineBreak/><LineBreak/>
                 I would like to give this program out under an open source license,

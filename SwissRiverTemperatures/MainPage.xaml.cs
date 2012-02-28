@@ -45,7 +45,7 @@ namespace SwissRiverTemperatures
             // Make an asynchronous REST GET request
             if (NetworkInterface.GetIsNetworkAvailable())
             {
-                _wc.OpenReadAsync(new Uri(String.Format(API.FeedUrl, DateTime.Now)));
+                _wc.OpenReadAsync(new Uri(String.Format(API.FeedUrl, DateTime.Now.ToString("yyyyMMddHHmmssffff"))));
                 UpdateVisibility(StatusOptions.Connecting);
             }
             else
@@ -59,7 +59,6 @@ namespace SwissRiverTemperatures
             if (e.Error != null)
             {
                 UpdateVisibility(StatusOptions.ParseError);
-                Debug.WriteLine(e.Error);
                 return;
             }
             else
@@ -75,7 +74,16 @@ namespace SwissRiverTemperatures
                                           where ((XElement)n).Name == ns + "tag"
                                           select ((XElement)n).Value).Single();
                         int labelPos = label.IndexOf('-');
-                        String riverName = label.Substring(0, labelPos).Trim();
+                        String riverName;
+                        try
+                        {
+                            riverName = label.Substring(0, labelPos).Trim();
+                        }
+                        catch (System.ArgumentOutOfRangeException)
+                        {
+                            // Datastream name does not contains a hyphen
+                            continue;
+                        }
 
                         // Get or create river object
                         Models.River river = Rivers.Where(r => r.Name == riverName).DefaultIfEmpty(new Models.River(riverName)).Single();

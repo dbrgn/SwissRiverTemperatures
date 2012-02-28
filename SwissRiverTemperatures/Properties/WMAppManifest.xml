@@ -1,6 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Deployment xmlns="http://schemas.microsoft.com/windowsphone/2009/deployment" AppPlatformVersion="7.1">
-  <App xmlns="" ProductID="{63cac2ea-866d-4fb0-81f9-466ef4835b5f}" Title="SwissRiverTem" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="SwissRiverTemperatures author" Description="Sample description" Publisher="SwissRiverTemperatures">
+  <App xmlns="" ProductID="{63cac2ea-866d-4fb0-81f9-466ef4835b5f}" Title="SwissRiverTemp" RuntimeType="Silverlight"
+      Version="1.0.1.0" Genre="apps.normal" Author="Danilo Bargen"
+      Description="This application shows the temperature of rivers in Switzerland. It queries a list of about 75 different measuring stations that report up to date temperature information."
+      Publisher="Danilo Bargen">
     <IconPath IsRelative="true" IsResource="false">Images\icon-62.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_GAMERSERVICES" />
